@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Users, MapPin, TrendingUp, Bell, Clock, ChevronRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -6,19 +6,6 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { endpoints, Election } from "@/lib/api";
-import { useState, useEffect } from "react";
-
-export const Route = createFileRoute("/dashboard")({
-  head: () => ({
-    meta: [
-      { title: "Election Dashboard — Votera" },
-      { name: "description", content: "Track upcoming elections, candidate announcements, and participation tips." },
-      { property: "og:title", content: "Election Dashboard — Votera" },
-      { property: "og:description", content: "Your election overview at a glance." },
-    ],
-  }),
-  component: DashboardPage,
-});
 
 const upcomingElections = [
   { name: "Bihar State Assembly", date: "Nov 2025", type: "State", seats: 243, status: "Upcoming" },
@@ -51,17 +38,20 @@ function StatCard({ icon: Icon, label, value, color }: { icon: React.ElementType
   );
 }
 
-function DashboardPage() {
+export default function DashboardPage() {
   const [elections, setElections] = useState(upcomingElections);
+
+  useEffect(() => {
+    document.title = "Election Dashboard — Votera";
+  }, []);
 
   useEffect(() => {
     endpoints.elections.list()
       .then(res => {
         if (res.items && res.items.length > 0) {
-          // Map backend items to frontend format
           const mapped = res.items.map((item: Election) => ({
             name: item.name,
-            date: "Oct 2025", // Mocking date since backend doesn't provide it yet
+            date: "Oct 2025",
             type: "General",
             seats: 543,
             status: item.status.charAt(0).toUpperCase() + item.status.slice(1)
@@ -71,6 +61,7 @@ function DashboardPage() {
       })
       .catch(err => console.error("Failed to fetch elections:", err));
   }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

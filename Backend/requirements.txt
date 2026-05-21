@@ -12,3 +12,5 @@ redis
 httpx
 python-multipart
 email-validator
+fastapi
+uvicorn[standard]

@@ -1,22 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle, Trophy, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-
-export const Route = createFileRoute("/quiz")({
-  head: () => ({
-    meta: [
-      { title: "Election Quiz — Votera" },
-      { name: "description", content: "Test your election knowledge with fun quizzes." },
-      { property: "og:title", content: "Election Quiz — Votera" },
-      { property: "og:description", content: "How much do you know about the election process? Take the quiz!" },
-    ],
-  }),
-  component: QuizPage,
-});
 
 const questions = [
   { q: "What is the minimum voting age in India?", options: ["16", "18", "21", "25"], answer: 1 },
@@ -26,12 +13,16 @@ const questions = [
   { q: "Which form is used for voter registration?", options: ["Form 2", "Form 4", "Form 6", "Form 8"], answer: 2 },
 ];
 
-function QuizPage() {
+export default function QuizPage() {
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [answered, setAnswered] = useState(false);
+
+  useEffect(() => {
+    document.title = "Election Quiz — Votera";
+  }, []);
 
   const handleSelect = (idx: number) => {
     if (answered) return;

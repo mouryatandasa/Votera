@@ -1,21 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, ChevronDown } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-
-export const Route = createFileRoute("/faq")({
-  head: () => ({
-    meta: [
-      { title: "FAQ — Votera" },
-      { name: "description", content: "Frequently asked questions about elections, voting, and voter registration." },
-      { property: "og:title", content: "FAQ — Votera" },
-      { property: "og:description", content: "Get answers to common election questions." },
-    ],
-  }),
-  component: FaqPage,
-});
 
 const categories = ["All", "Registration", "Eligibility", "Voting Day", "Results"];
 
@@ -32,10 +19,14 @@ const faqs = [
   { category: "Results", q: "How are votes counted?", a: "India uses Electronic Voting Machines (EVMs). Votes are counted at designated counting centers under strict supervision with VVPAT verification for a random sample." },
 ];
 
-function FaqPage() {
+export default function FaqPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    document.title = "FAQ — Votera";
+  }, []);
 
   const filtered = faqs.filter((faq) => {
     const matchesCategory = activeCategory === "All" || faq.category === activeCategory;

@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard, Calendar, Users, FileText, Bell, BarChart3,
@@ -8,19 +7,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { endpoints } from "@/lib/api";
-import { useEffect } from "react";
-
-export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title: "Admin Dashboard — Votera" },
-      { name: "description", content: "Manage elections, content, and analytics." },
-      { property: "og:title", content: "Admin Dashboard — Votera" },
-      { property: "og:description", content: "Votera administration panel." },
-    ],
-  }),
-  component: AdminPage,
-});
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: "Overview", id: "overview" },
@@ -44,10 +30,14 @@ const recentUsers = [
   { name: "Fatima Ali", email: "fatima@example.com", joined: "2 days ago", quizzes: 5 },
 ];
 
-function AdminPage() {
+export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showModal, setShowModal] = useState(false);
   const [backendStatus, setBackendStatus] = useState<string>("Checking...");
+
+  useEffect(() => {
+    document.title = "Admin Dashboard — Votera";
+  }, []);
 
   useEffect(() => {
     endpoints.elections.live()

@@ -1,22 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, MapPin, Phone, Award, BookOpen, Settings, LogOut } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-
-export const Route = createFileRoute("/profile")({
-  head: () => ({
-    meta: [
-      { title: "My Profile — Votera" },
-      { name: "description", content: "Manage your Votera profile and track your learning progress." },
-      { property: "og:title", content: "My Profile — Votera" },
-      { property: "og:description", content: "Your Votera account and progress." },
-    ],
-  }),
-  component: ProfilePage,
-});
 
 const badges = [
   { name: "Quiz Master", description: "Scored 5/5 on the election quiz", earned: true },
@@ -32,8 +20,12 @@ const activity = [
   { action: "Viewed Election Timeline", time: "3 days ago", score: null },
 ];
 
-function ProfilePage() {
+export default function ProfilePage() {
   const { user, logout, isLoading } = useAuth();
+
+  useEffect(() => {
+    document.title = "My Profile — Votera";
+  }, []);
 
   if (isLoading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
@@ -54,6 +46,7 @@ function ProfilePage() {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

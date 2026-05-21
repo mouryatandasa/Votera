@@ -1,22 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Bell, Check, Calendar, MessageSquare, AlertTriangle, Info, CheckCheck } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-
-export const Route = createFileRoute("/notifications")({
-  head: () => ({
-    meta: [
-      { title: "Notifications — Votera" },
-      { name: "description", content: "Stay updated with election alerts, reminders, and important announcements." },
-      { property: "og:title", content: "Notifications — Votera" },
-      { property: "og:description", content: "Your election notifications and alerts." },
-    ],
-  }),
-  component: NotificationsPage,
-});
 
 interface Notification {
   id: string;
@@ -50,9 +37,13 @@ const colorMap = {
   success: "bg-civic-green/10 text-civic-green",
 };
 
-function NotificationsPage() {
+export default function NotificationsPage() {
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  useEffect(() => {
+    document.title = "Notifications — Votera";
+  }, []);
 
   const markAllRead = () => setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   const markRead = (id: string) => setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, read: true } : n));

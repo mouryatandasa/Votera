@@ -1,22 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, Circle, ChevronRight, FileText, Home, Camera, ShieldCheck, PartyPopper } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-
-export const Route = createFileRoute("/registration")({
-  head: () => ({
-    meta: [
-      { title: "Voter Registration Guide — Votera" },
-      { name: "description", content: "Step-by-step guide to register as a voter with document checklist." },
-      { property: "og:title", content: "Voter Registration Guide — Votera" },
-      { property: "og:description", content: "Complete voter registration walkthrough." },
-    ],
-  }),
-  component: RegistrationPage,
-});
 
 const steps = [
   {
@@ -76,8 +63,12 @@ const steps = [
   },
 ];
 
-function RegistrationPage() {
+export default function RegistrationPage() {
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    document.title = "Voter Registration Guide — Votera";
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">

@@ -1,22 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User, Sparkles, Vote, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { endpoints } from "@/lib/api";
-
-export const Route = createFileRoute("/chat")({
-  head: () => ({
-    meta: [
-      { title: "Ask Votera — AI Election Assistant" },
-      { name: "description", content: "Chat with our AI assistant about elections, voter registration, polling booths, and more." },
-      { property: "og:title", content: "Ask Votera — AI Election Assistant" },
-      { property: "og:description", content: "Get instant answers to all your election questions." },
-    ],
-  }),
-  component: ChatPage,
-});
 
 interface Message {
   id: string;
@@ -33,20 +20,15 @@ const suggestedPrompts = [
   "How does counting work?",
 ];
 
-const botResponses: Record<string, string> = {
-  "How do I register to vote?":
-    "To register as a voter in India, you can:\n\n1. **Online**: Visit the National Voters' Service Portal (NVSP) at nvsp.in\n2. **Offline**: Fill Form 6 and submit it to your nearest Electoral Registration Office\n3. **Documents needed**: Proof of age, proof of address, and a passport-size photo\n\nYou must be at least 18 years old on the qualifying date (January 1 of the year of revision).",
-  "Am I eligible to vote?":
-    "You are eligible to vote in India if you:\n\n✅ Are a citizen of India\n✅ Are 18 years or older on the qualifying date\n✅ Are a resident of the constituency\n✅ Are not disqualified under any law\n✅ Have registered as a voter\n\nNon-Resident Indians (NRIs) can also vote if registered under Section 20A.",
-  "What documents do I need?":
-    "For voter registration, you'll need:\n\n📄 **Proof of Age**: Birth certificate, school certificate, or passport\n📄 **Proof of Address**: Aadhaar card, utility bill, bank passbook, or ration card\n📸 **Passport-size photograph**\n\nFor voting day, carry your **Voter ID card (EPIC)** or any of the 12 approved photo ID documents.",
-};
-
-function ChatPage() {
+export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    document.title = "Ask Votera — AI Election Assistant";
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,17 +43,17 @@ function ChatPage() {
 
     try {
       const data = await endpoints.chat.send(text);
-      const botMsg: Message = { 
-        id: (Date.now() + 1).toString(), 
-        role: "assistant", 
-        content: data.response 
+      const botMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: data.response
       };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
-      const botMsg: Message = { 
-        id: (Date.now() + 1).toString(), 
-        role: "assistant", 
-        content: "Sorry, I'm having trouble connecting to my brain right now. Please try again later." 
+      const botMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Sorry, I'm having trouble connecting to my brain right now. Please try again later."
       };
       setMessages((prev) => [...prev, botMsg]);
     } finally {

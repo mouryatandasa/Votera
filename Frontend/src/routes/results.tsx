@@ -1,21 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, Users, Filter, TrendingUp, Award } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-
-export const Route = createFileRoute("/results")({
-  head: () => ({
-    meta: [
-      { title: "Election Results — Votera" },
-      { name: "description", content: "Track live election results with seat counts and candidate details." },
-      { property: "og:title", content: "Election Results — Votera" },
-      { property: "og:description", content: "Real-time election results and analysis." },
-    ],
-  }),
-  component: ResultsPage,
-});
 
 const regions = ["All India", "North", "South", "East", "West", "Central"];
 
@@ -38,8 +25,12 @@ const topCandidates = [
   { name: "Kabir Das", party: "Party B", constituency: "Kolkata South", votes: "76,332", status: "Trailing" },
 ];
 
-function ResultsPage() {
+export default function ResultsPage() {
   const [selectedRegion, setSelectedRegion] = useState("All India");
+
+  useEffect(() => {
+    document.title = "Election Results — Votera";
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">

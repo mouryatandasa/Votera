@@ -1,20 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ClipboardList, Clock, UserCheck, Megaphone, Vote, BarChart3, Trophy, CheckCircle } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-
-export const Route = createFileRoute("/timeline")({
-  head: () => ({
-    meta: [
-      { title: "Election Timeline — Votera" },
-      { name: "description", content: "Track every stage of the election process from registration to results." },
-      { property: "og:title", content: "Election Timeline — Votera" },
-      { property: "og:description", content: "Visual timeline of the complete election process." },
-    ],
-  }),
-  component: TimelinePage,
-});
 
 const timelineSteps = [
   { icon: ClipboardList, title: "Registration Opens", date: "Jan 15, 2025", description: "Voter registration portal opens. Submit Form 6 online or offline.", status: "completed" },
@@ -26,7 +14,11 @@ const timelineSteps = [
   { icon: Trophy, title: "Results Declared", date: "Apr 19, 2025", description: "Final results announced by the Election Commission.", status: "upcoming" },
 ];
 
-function TimelinePage() {
+export default function TimelinePage() {
+  useEffect(() => {
+    document.title = "Election Timeline — Votera";
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
